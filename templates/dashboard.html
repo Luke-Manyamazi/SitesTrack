@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SitesTrack Dashboard</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <h1>SitesTrack Dashboard</h1>
+
+    <!-- TOP CARDS -->
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Visits</h3>
+            <h2>{{ total_visits }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>Today's Visits</h3>
+            <h2>{{ today_visits }}</h2>
+        </div>
+
+    </div>
+
+    <!-- MAIN DASHBOARD GRID -->
+    <div class="dashboard">
+
+        <!-- TABLE -->
+        <div>
+            <table>
+                <tr>
+                    <th>Site</th>
+                    <th>Visits</th>
+                </tr>
+
+                {% for site, visits in stats %}
+                <tr>
+                    <td>{{ site }}</td>
+                    <td>{{ visits }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- CHART -->
+        <div class="chart-container">
+            <canvas id="visitsChart"></canvas>
+        </div>
+
+    </div>
+
+    <!-- CHART SCRIPT -->
+    <script>
+        const labels = [{% for site, visits in stats %}"{{ site }}",{% endfor %}];
+        const data = [{% for site, visits in stats %}{{ visits }},{% endfor %}];
+
+        new Chart(document.getElementById('visitsChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Visits per Site',
+                    data: data
+                }]
+            }
+        });
+    </script>
+
+</body>
+
+</body>
+</html>
